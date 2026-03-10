@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { HashRouter as Router, Routes, Route } from "react-router-dom"  // ✅ FIXED missing imports
+import { HashRouter as Router, Routes, Route } from "react-router-dom"
 import LandingPage from "./pages/LandingPage"
 import LoginPage from "./pages/LoginPage"
 import AdminDashboard from "./pages/AdminDashboard";
@@ -7,7 +7,16 @@ import RecruiterDashboard from "./pages/RecruiterDashboard";
 import StudentDashboard from "./pages/Studentdashboard "
 import ExamVerify from "./pages/Examverify"
 import Instruction from "./pages/Instruction"
-
+import ExamPage from "./pages/ExamPage"; 
+import ExamRouter from "./pages/Examrouter";
+import SQLExamPage from "./pages/SQLExamPage";
+import { AppProvider } from './context/AppContext';
+import CreateExam from './pages/CreateExam';
+import QuestionBank from './pages/QuestionBank';
+import Candidates from './pages/Candidates';
+import LiveMonitoring from './pages/LiveMonitoring';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 function App() {
   // useEffect(() => {
   //   const blockKeys = (e) => {
@@ -50,19 +59,28 @@ function App() {
   // }, [])
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
-        <Route path="/student-dashboard" element={<StudentDashboard/>}/>
-        <Route path="/exam-verify" element={<ExamVerify/>} />
-        <Route path="/instruction" element={<Instruction/>} />
-
-
-      </Routes>
-    </Router>
+    <AppProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
+          <Route path="/student-dashboard" element={<StudentDashboard/>}/>
+          <Route path="/exam-verify" element={<ExamVerify/>} />
+          <Route path="/instruction" element={<Instruction/>} />
+          <Route path="/exam" element={<ExamPage />} />
+          <Route path="/exam-router" element={<ExamRouter />} />
+          <Route path="/sql-exam" element={<SQLExamPage />} />
+          <Route path="/create-exam" element={<CreateExam />} />
+          <Route path="/question-bank" element={<QuestionBank />} />
+          <Route path="/candidates" element={<Candidates />} />
+          <Route path="/live-monitoring" element={<LiveMonitoring />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </Router>
+    </AppProvider>
   )
 }
 

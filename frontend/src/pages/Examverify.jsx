@@ -1,23 +1,23 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-/* ─── Design Tokens (Light Theme) ─── */
+/* ─── Design Tokens (Professional Theme) ─── */
 const T = {
-  bg:         "#f4f6fb",
+  bg:         "#f5f7fb",
   surface:    "#ffffff",
-  border:     "rgba(0,0,0,0.08)",
-  accent:     "#4361ee",
-  accentSoft: "#eef1fd",
+  border:     "#e2e8f0",
+  accent:     "#2563eb",
+  accentSoft: "#dbeafe",
   teal:       "#0891b2",
-  green:      "#059669",
-  greenSoft:  "#ecfdf5",
-  red:        "#e11d48",
-  redSoft:    "#fff1f2",
-  amber:      "#d97706",
-  amberSoft:  "#fffbeb",
-  text:       "#0d1117",
-  muted:      "#6b7280",
-  dim:        "#9ca3af",
+  green:      "#16a34a",
+  greenSoft:  "#f0fdf4",
+  red:        "#dc2626",
+  redSoft:    "#fef2f2",
+  amber:      "#ea580c",
+  amberSoft:  "#fff7ed",
+  text:       "#1e293b",
+  muted:      "#64748b",
+  dim:        "#94a3b8",
 };
 
 /* ─── Camera Hook ─── */
@@ -118,10 +118,9 @@ function IDCardScan({ onNext }) {
 
   return (
     <div style={styles.card}>
-      <div style={{ fontSize: 28, marginBottom: 10 }}>🪪</div>
-      <h2 style={styles.h2}>Scan Your ID Card</h2>
+      <h2 style={styles.h2}>ID Card Capture</h2>
       <p style={styles.sub}>
-        Hold your college ID card up to the webcam. Align it within the frame, then tap Capture.
+        Position your ID card in center of the frame. Ensure good lighting and clear visibility.
       </p>
 
       <div style={styles.camBox}>
@@ -177,15 +176,15 @@ function IDCardScan({ onNext }) {
           disabled={tick !== null}
           onClick={startCountdown}
         >
-          {tick !== null ? `Capturing in ${tick}…` : "📸  Capture ID Card"}
+          {tick !== null ? `Capturing in ${tick}…` : "Capture ID Card"}
         </button>
       ) : (
         <div style={{ display: "flex", gap: 10 }}>
           <button style={{ ...styles.btn, ...styles.ghostBtn, flex: 1 }} onClick={() => setCaptured(null)}>
-            ↩ Retake
+            Retake
           </button>
           <button style={{ ...styles.btn, flex: 2 }} onClick={() => onNext(captured)}>
-            Looks Good → Face Scan
+            Continue
           </button>
         </div>
       )}
@@ -274,39 +273,36 @@ function FaceScan({ idCapture, onVerified, onFail }) {
 
   return (
     <div style={styles.card}>
-      <div style={{ fontSize: 28, marginBottom: 10 }}>
-        {phase === "done" && result?.match ? "✅" : phase === "done" ? "❌" : "👁️"}
-      </div>
       <h2 style={styles.h2}>
-        {phase === "done" && result?.match  ? "Identity Confirmed!"  :
+        {phase === "done" && result?.match  ? "Verification Successful"  :
          phase === "done"                   ? "Verification Failed"  :
-         phase === "comparing"              ? `Analyzing Face${analysisDots}` :
-         phase === "scanning"               ? "Scanning Face…"       :
-                                             "Live Face Scan"}
+         phase === "comparing"              ? "Analyzing…" :
+         phase === "scanning"               ? "Scanning…"       :
+                                             "Face Capture"}
       </h2>
       <p style={styles.sub}>
-        {phase === "align"     && "Look directly at the camera. Ensure your face is well-lit and centred."}
-        {phase === "scanning"  && "Hold still — capturing biometric data…"}
-        {phase === "comparing" && "AI model is comparing your face with the ID card image…"}
+        {phase === "align"     && "Look at the camera directly. Ensure good lighting and clear visibility."}
+        {phase === "scanning"  && "Please hold still while we capture your biometric data."}
+        {phase === "comparing" && "Verifying your identity against the ID card image."}
         {phase === "done"      && result?.reason}
       </p>
 
       {/* Split preview */}
-      <div style={{ display: "flex", gap: 12, marginBottom: 18 }}>
+      <div style={{ display: "flex", gap: 14, marginBottom: 20 }}>
         {/* ID thumb */}
         <div style={{ flex: 1 }}>
-          <div style={styles.camLabel}>ID CARD</div>
+          <div style={styles.camLabel}>ID Card</div>
           <div style={{
-            borderRadius: 10, overflow: "hidden", aspectRatio: "4/3",
-            border: `1px solid ${T.border}`, background: "#f8f9fc",
+            borderRadius: 8, overflow: "hidden", aspectRatio: "4/3",
+            border: `1px solid ${T.border}`, background: "#f8fafc",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}>
             {idCapture && idCapture.length > 200 ? (
               <img src={idCapture} alt="id" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
             ) : (
               <div style={{ textAlign: "center", padding: 12 }}>
-                <span style={{ fontSize: 28 }}>🪪</span>
-                <div style={{ fontSize: 10, color: T.dim, marginTop: 4 }}>Simulated</div>
+                <span style={{ fontSize: 32 }}>🪪</span>
+                <div style={{ fontSize: 11, color: T.dim, marginTop: 6, fontWeight: 500 }}>Simulated</div>
               </div>
             )}
           </div>
@@ -314,13 +310,13 @@ function FaceScan({ idCapture, onVerified, onFail }) {
 
         {/* Live cam */}
         <div style={{ flex: 1 }}>
-          <div style={styles.camLabel}>LIVE FACE</div>
+          <div style={styles.camLabel}>Live Face</div>
           <div style={{
-            borderRadius: 10, overflow: "hidden", aspectRatio: "4/3",
-            position: "relative", background: "#f8f9fc",
+            borderRadius: 8, overflow: "hidden", aspectRatio: "4/3",
+            position: "relative", background: "#f8fafc",
             border: `1.5px solid ${borderColor}`,
-            boxShadow: phase !== "align" ? `0 0 16px ${borderColor}33` : "none",
-            transition: "border-color .4s, box-shadow .4s",
+            boxShadow: phase !== "align" ? `0 0 12px ${borderColor}33` : "none",
+            transition: "border-color .3s, box-shadow .3s",
           }}>
             {phase === "align" || phase === "scanning" ? (
               camError ? (
@@ -368,8 +364,8 @@ function FaceScan({ idCapture, onVerified, onFail }) {
       {/* Simulated analysis log during comparing */}
       {phase === "comparing" && (
         <div style={{
-          background: "#f8f9fc", border: `1px solid ${T.border}`,
-          borderRadius: 10, padding: "12px 14px", marginBottom: 16,
+          background: "#f8fafc", border: `1px solid ${T.border}`,
+          borderRadius: 8, padding: "12px 14px", marginBottom: 18,
         }}>
           {ANALYSIS_STEPS.map((step, i) => (
             <SimulatedLogLine key={i} text={step} delay={i * 650} />
@@ -390,17 +386,18 @@ function FaceScan({ idCapture, onVerified, onFail }) {
 
       {/* Confidence bar */}
       {phase === "done" && result && (
-        <div style={{ marginBottom: 18 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+        <div style={{ marginBottom: 20 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
             <span style={{
-              fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
-              color: T.muted, letterSpacing: "1px",
+              fontSize: 11, fontFamily: "'DM Sans', sans-serif",
+              color: T.dim, letterSpacing: "0.5px", fontWeight: 600,
+              textTransform: "uppercase",
             }}>
-              MATCH CONFIDENCE
+              Confidence Score
             </span>
             <span style={{
-              fontSize: 13, fontWeight: 700,
-              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 14, fontWeight: 700,
+              fontFamily: "'DM Sans', sans-serif",
               color: result.match ? T.green : T.red,
             }}>
               {result.confidence}%
@@ -410,25 +407,19 @@ function FaceScan({ idCapture, onVerified, onFail }) {
             <div style={{
               ...styles.progressFill,
               width: `${result.confidence}%`,
-              background: result.match
-                ? `linear-gradient(90deg, ${T.green}, #34d399)`
-                : `linear-gradient(90deg, ${T.red}, #fb7185)`,
-              transition: "width 1.2s cubic-bezier(.4,0,.2,1)",
+              background: result.match ? T.green : T.red,
             }} />
           </div>
 
           {/* Simulated AI badge */}
           <div style={{
-            marginTop: 10, display: "flex", alignItems: "center", gap: 6,
-            background: T.accentSoft, border: `1px solid rgba(67,97,238,0.15)`,
-            borderRadius: 8, padding: "7px 12px",
+            marginTop: 12, display: "flex", alignItems: "center", gap: 8,
+            background: "#f1f5f9", border: `1px solid ${T.border}`,
+            borderRadius: 8, padding: "8px 12px",
           }}>
-            <span style={{ fontSize: 13 }}>🤖</span>
-            <span style={{ fontSize: 11, color: T.accent, fontWeight: 600 }}>
-              Simulated AI — Demo Mode
-            </span>
-            <span style={{ fontSize: 11, color: T.muted, marginLeft: "auto" }}>
-              Results are randomized
+            <span style={{ fontSize: 13 }}>ℹ️</span>
+            <span style={{ fontSize: 12, color: T.muted, fontWeight: 500 }}>
+              Demo Mode - Results are simulated
             </span>
           </div>
         </div>
@@ -436,26 +427,26 @@ function FaceScan({ idCapture, onVerified, onFail }) {
 
       {/* CTAs */}
       {phase === "align" && (
-        <button style={styles.btn} onClick={startScan}>🔍  Start Face Scan</button>
+        <button style={styles.btn} onClick={startScan}>Start Face Scan</button>
       )}
       {phase === "done" && result?.match && (
         <button
-          style={{ ...styles.btn, background: `linear-gradient(135deg, ${T.green}, #047857)` }}
+          style={{ ...styles.btn, background: T.green, boxShadow: `0 2px 8px rgba(22,163,74,0.15)` }}
           onClick={onVerified}
         >
-          ✅  Enter Exam →
+          Proceed to Exam
         </button>
       )}
       {phase === "done" && !result?.match && (
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 12 }}>
           <button style={{ ...styles.btn, ...styles.ghostBtn, flex: 1 }} onClick={retry}>
-            ↩ Retry
+            Retry
           </button>
           <button
-            style={{ ...styles.btn, background: `linear-gradient(135deg, ${T.red}, #be123c)`, flex: 2 }}
+            style={{ ...styles.btn, background: T.red, boxShadow: `0 2px 8px rgba(220,38,38,0.15)`, flex: 2 }}
             onClick={onFail}
           >
-            Contact Admin
+            Contact Support
           </button>
         </div>
       )}
@@ -519,8 +510,9 @@ function ExamReady({ exam }) {
   return (
     <div style={{
       ...styles.card,
-      border: `1px solid rgba(5,150,105,0.3)`,
-      boxShadow: `0 8px 40px rgba(5,150,105,0.1)`,
+      border: `1px solid ${T.border}`,
+      background: "#ffffff",
+      boxShadow: "0 4px 16px rgba(0,0,0,0.05)",
     }}>
       {countdown !== null ? (
         <div style={{ textAlign: "center", padding: "40px 0" }}>
@@ -538,23 +530,23 @@ function ExamReady({ exam }) {
         </div>
       ) : (
         <>
-          <div style={{ textAlign: "center", fontSize: 44, marginBottom: 12, animation: "pop .5s ease" }}>🎯</div>
           <div style={{
             textAlign: "center", fontSize: 10, color: T.green,
-            fontFamily: "'JetBrains Mono', monospace", letterSpacing: "1.5px",
-            marginBottom: 10, fontWeight: 600,
+            fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.6px",
+            marginBottom: 12, fontWeight: 600,
+            textTransform: "uppercase",
           }}>
-            IDENTITY VERIFIED — CLEARED TO PROCEED
+            ✓ Verification Successful
           </div>
-          <h2 style={{ ...styles.h2, textAlign: "center" }}>Ready to Begin?</h2>
-          <p style={{ ...styles.sub, textAlign: "center", marginBottom: 22 }}>
+          <h2 style={{ ...styles.h2, textAlign: "center", marginBottom: 6 }}>Ready to begin?</h2>
+          <p style={{ ...styles.sub, textAlign: "center", marginBottom: 24 }}>
             {exam?.exam || "Data Structures Assessment"}
           </p>
 
           {/* Info grid */}
           <div style={{
             display: "grid", gridTemplateColumns: "1fr 1fr",
-            gap: 10, marginBottom: 20,
+            gap: 12, marginBottom: 24,
           }}>
             {[
               ["Duration",   exam?.duration   || "90 min"],
@@ -562,44 +554,45 @@ function ExamReady({ exam }) {
               ["Company",    exam?.company     || "Amazon"],
               ["Difficulty", exam?.difficulty  || "Hard"],
               ["Date",       exam?.date        || "Today"],
-              ["Proctoring", "AI Active ✅"],
+              ["Proctoring", "AI Active"],
             ].map(([k, v]) => (
               <div key={k} style={{
-                background: "#f8f9fc", border: `1px solid ${T.border}`,
-                borderRadius: 10, padding: "10px 12px",
+                background: "#f8fafc",
+                border: `1px solid ${T.border}`,
+                borderRadius: 8, padding: "14px 16px",
               }}>
                 <div style={{
-                  fontSize: 9, color: T.dim,
-                  fontFamily: "'JetBrains Mono', monospace",
-                  letterSpacing: "1px", marginBottom: 4, fontWeight: 600,
+                  fontSize: 11, color: T.dim,
+                  fontFamily: "'DM Sans', sans-serif",
+                  letterSpacing: "0.5px", marginBottom: 6, fontWeight: 600,
+                  textTransform: "uppercase",
                 }}>
-                  {k.toUpperCase()}
+                  {k}
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: T.text }}>{v}</div>
+                <div style={{ fontSize: 15, fontWeight: 600, color: T.text }}>{v}</div>
               </div>
             ))}
           </div>
 
           {/* Warning */}
           <div style={{
-            background: T.amberSoft, border: `1px solid rgba(217,119,6,0.25)`,
-            borderRadius: 10, padding: "10px 14px", marginBottom: 20,
+            background: T.amberSoft, border: `1px solid rgba(234,88,12,0.25)`,
+            borderRadius: 8, padding: "12px 16px", marginBottom: 24,
           }}>
-            <p style={{ fontSize: 12, color: T.amber, lineHeight: 1.7 }}>
-              ⚠️ Once started: tab switching, copy-paste, and window minimizing are disabled. AI proctoring monitors your face throughout.
+            <p style={{ fontSize: 13, color: T.amber, lineHeight: 1.8, margin: 0 }}>
+              <strong>Important:</strong> Once started, tab switching, copy-paste, and window minimizing are disabled. AI proctoring monitors your activity.
             </p>
           </div>
 
           <button
             style={{
               ...styles.btn,
-              background: `linear-gradient(135deg, ${T.green}, #047857)`,
-              fontSize: 15, padding: "14px 0",
-              boxShadow: `0 4px 16px rgba(5,150,105,0.35)`,
+              background: T.green,
+              boxShadow: "0 2px 8px rgba(22,163,74,0.15)",
             }}
             onClick={handleStart}
           >
-            🚀  Start Exam Now
+            Start Exam
           </button>
         </>
       )}
@@ -651,32 +644,42 @@ export default function ExamVerify() {
 
           {/* Header */}
           <div style={{
-            display: "flex", alignItems: "center", gap: 12, marginBottom: 26,
+            display: "flex", alignItems: "center", gap: 16, marginBottom: 32,
           }}>
             <button
               onClick={() => navigate("/student-dashboard")}
               style={{
                 background: "#fff", border: `1px solid ${T.border}`,
                 color: T.muted, cursor: "pointer", fontSize: 18,
-                width: 36, height: 36, borderRadius: 10,
+                width: 40, height: 40, borderRadius: 8,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
-                transition: "background 0.2s",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = T.accentSoft;
+                e.currentTarget.style.color = T.accent;
+                e.currentTarget.style.borderColor = T.accent;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#fff";
+                e.currentTarget.style.color = T.muted;
+                e.currentTarget.style.borderColor = T.border;
               }}
             >
               ←
             </button>
             <div>
               <div style={{
-                fontSize: 10, color: T.dim,
-                fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: "1.5px", marginBottom: 3, fontWeight: 600,
+                fontSize: 12, color: T.dim,
+                fontFamily: "'DM Sans', sans-serif",
+                letterSpacing: "0.6px", marginBottom: 4, fontWeight: 600,
+                textTransform: "uppercase",
               }}>
-                IDENTITY VERIFICATION
+                Exam Verification
               </div>
               <div style={{
-                fontSize: 16, fontWeight: 700,
-                fontFamily: "'Syne', sans-serif",
+                fontSize: 20, fontWeight: 600,
+                fontFamily: "'DM Sans', sans-serif",
                 color: T.text, letterSpacing: "-0.3px",
               }}>
                 {exam?.exam || "Exam Verification"}
@@ -686,13 +689,13 @@ export default function ExamVerify() {
             {/* Demo mode tag */}
             <div style={{
               marginLeft: "auto",
-              background: T.amberSoft, border: `1px solid rgba(217,119,6,0.25)`,
-              borderRadius: 100, padding: "4px 12px",
-              fontSize: 10, color: T.amber,
-              fontFamily: "'JetBrains Mono', monospace",
-              fontWeight: 600, letterSpacing: "0.5px",
+              background: T.amberSoft, border: `1px solid rgba(234,88,12,0.3)`,
+              borderRadius: 6, padding: "6px 12px",
+              fontSize: 11, color: T.amber,
+              fontFamily: "'DM Sans', sans-serif",
+              fontWeight: 600, letterSpacing: "0.4px",
             }}>
-              DEMO MODE
+              Demo Mode
             </div>
           </div>
 
@@ -700,43 +703,39 @@ export default function ExamVerify() {
           {step < 2 && (
             <div style={{
               background: "#fff", border: `1px solid ${T.border}`,
-              borderRadius: 14, padding: "16px 20px",
+              borderRadius: 12, padding: "16px 20px",
               display: "flex", alignItems: "center",
-              marginBottom: 20,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+              marginBottom: 24,
             }}>
               {stepLabels.map((label, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", flex: i === 0 ? 1 : 0 }}>
-                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                     <div style={{
-                      width: 32, height: 32, borderRadius: "50%",
-                      background: i < step ? T.green : i === step ? T.accent : "#f3f4f6",
+                      width: 36, height: 36, borderRadius: "50%",
+                      background: i < step ? T.green : i === step ? T.accent : "#f1f5f9",
                       border: `2px solid ${i < step ? T.green : i === step ? T.accent : T.border}`,
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 12, fontWeight: 700,
+                      fontSize: 13, fontWeight: 600,
                       color: i <= step ? "#fff" : T.dim,
-                      boxShadow: i === step ? `0 0 0 4px rgba(67,97,238,0.12)` : "none",
-                      transition: "all .35s",
+                      transition: "all .3s",
                     }}>
                       {i < step ? "✓" : i + 1}
                     </div>
                     <span style={{
-                      fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-                      letterSpacing: "1px", whiteSpace: "nowrap",
+                      fontSize: 10, fontFamily: "'DM Sans', sans-serif",
+                      letterSpacing: "0.5px", whiteSpace: "nowrap",
                       fontWeight: 600,
                       color: i === step ? T.accent : i < step ? T.green : T.dim,
                     }}>
-                      {label.toUpperCase()}
+                      {label}
                     </span>
                   </div>
                   {i === 0 && (
                     <div style={{
-                      flex: 1, height: 2, margin: "0 10px", marginTop: -16,
+                      flex: 1, height: 2, margin: "0 12px", marginTop: -18,
                       borderRadius: 99,
-                      background: step > 0
-                        ? `linear-gradient(90deg, ${T.green}, #34d399)`
-                        : "#e5e7eb",
-                      transition: "background .5s",
+                      background: step > 0 ? T.green : "#e2e8f0",
+                      transition: "background .3s",
                     }} />
                   )}
                 </div>
@@ -769,103 +768,103 @@ const styles = {
     background: T.bg,
     display: "flex", flexDirection: "column",
     alignItems: "center", justifyContent: "center",
-    padding: "28px 16px",
+    padding: "40px 20px",
     fontFamily: "'DM Sans', sans-serif",
     color: T.text,
     position: "relative",
   },
   orb1: {
-    position: "fixed", top: "0%", left: "5%",
-    width: 380, height: 380, borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(67,97,238,0.08) 0%, transparent 70%)",
-    filter: "blur(50px)", pointerEvents: "none", zIndex: 0,
+    position: "fixed", top: "-15%", left: "-10%",
+    width: 450, height: 450, borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(37,99,235,0.05) 0%, transparent 70%)",
+    filter: "blur(80px)", pointerEvents: "none", zIndex: 0,
   },
   orb2: {
-    position: "fixed", bottom: "5%", right: "5%",
-    width: 300, height: 300, borderRadius: "50%",
-    background: "radial-gradient(circle, rgba(8,145,178,0.07) 0%, transparent 70%)",
-    filter: "blur(50px)", pointerEvents: "none", zIndex: 0,
+    position: "fixed", bottom: "-15%", right: "-10%",
+    width: 400, height: 400, borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(22,163,74,0.04) 0%, transparent 70%)",
+    filter: "blur(80px)", pointerEvents: "none", zIndex: 0,
   },
   grid: {
     position: "fixed", inset: 0,
-    backgroundImage: `linear-gradient(rgba(67,97,238,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(67,97,238,0.035) 1px,transparent 1px)`,
-    backgroundSize: "52px 52px", pointerEvents: "none", zIndex: 0,
+    backgroundImage: `linear-gradient(rgba(37,99,235,0.01) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,0.01) 1px,transparent 1px)`,
+    backgroundSize: "80px 80px", pointerEvents: "none", zIndex: 0,
   },
   card: {
     background: T.surface,
     border: `1px solid ${T.border}`,
-    borderRadius: 18, padding: 26,
-    boxShadow: "0 4px 32px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04)",
+    borderRadius: 12, padding: "40px 36px",
+    boxShadow: "0 4px 16px rgba(0,0,0,0.05)",
   },
   h2: {
-    fontSize: 20, fontWeight: 800, marginBottom: 6,
-    letterSpacing: "-0.5px",
+    fontSize: 28, fontWeight: 600, marginBottom: 10,
+    letterSpacing: "-0.2px",
     fontFamily: "'Syne', sans-serif", color: T.text,
   },
-  sub: { fontSize: 13, color: T.muted, marginBottom: 18, lineHeight: 1.65 },
+  sub: { fontSize: 15, color: T.muted, marginBottom: 24, lineHeight: 1.6 },
   camBox: {
     position: "relative", width: "100%", aspectRatio: "4/3",
-    background: "#f0f4ff", borderRadius: 12, overflow: "hidden",
-    marginBottom: 16, border: `1px solid ${T.border}`,
+    background: "#f8fafc", borderRadius: 12, overflow: "hidden",
+    marginBottom: 24, border: `1px solid ${T.border}`,
   },
   scanLine: {
     position: "absolute", left: 0, right: 0, height: 2,
     background: `linear-gradient(90deg, transparent, ${T.accent}, transparent)`,
     animation: "scanV 2.2s linear infinite",
-    boxShadow: `0 0 8px ${T.accent}66`,
+    boxShadow: `0 0 10px ${T.accent}66`,
     pointerEvents: "none",
   },
   guideText: {
-    position: "absolute", bottom: 12, left: 0, right: 0,
-    textAlign: "center", fontSize: 9,
-    fontFamily: "'JetBrains Mono', monospace",
-    color: T.accent, letterSpacing: "1.5px", fontWeight: 600,
+    position: "absolute", bottom: 14, left: 0, right: 0,
+    textAlign: "center", fontSize: 11,
+    fontFamily: "'DM Sans', sans-serif",
+    color: T.accent, letterSpacing: "0.8px", fontWeight: 600,
     pointerEvents: "none",
   },
   countdownOverlay: {
     position: "absolute", inset: 0,
     display: "flex", alignItems: "center", justifyContent: "center",
-    background: "rgba(248,249,252,0.75)", backdropFilter: "blur(4px)",
-    fontSize: 80, fontWeight: 900,
+    background: "rgba(255,255,255,0.9)", backdropFilter: "blur(8px)",
+    fontSize: 80, fontWeight: 700,
     fontFamily: "'Syne', sans-serif",
     color: T.accent,
   },
   capturedBadge: {
-    position: "absolute", top: 10, right: 10,
+    position: "absolute", top: 12, right: 12,
     background: T.green, color: "#fff",
-    fontSize: 10, fontWeight: 700, letterSpacing: "1px",
-    padding: "3px 10px", borderRadius: 99,
-    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 11, fontWeight: 600, letterSpacing: "0.5px",
+    padding: "6px 12px", borderRadius: 6,
+    fontFamily: "'DM Sans', sans-serif",
   },
   camLabel: {
-    fontSize: 9, fontFamily: "'JetBrains Mono', monospace",
-    letterSpacing: "1.5px", color: T.dim,
-    marginBottom: 5, fontWeight: 600,
+    fontSize: 11, fontFamily: "'DM Sans', sans-serif",
+    letterSpacing: "0.6px", color: T.dim,
+    marginBottom: 8, fontWeight: 600, textTransform: "uppercase",
   },
   spinner: {
-    width: 28, height: 28,
-    border: `3px solid rgba(67,97,238,0.15)`,
+    width: 32, height: 32,
+    border: `3px solid ${T.border}`,
     borderTopColor: T.accent,
     borderRadius: "50%", animation: "spin .7s linear infinite",
   },
   progressTrack: {
-    background: "#e5e7eb", borderRadius: 99, height: 6,
+    background: "#e2e8f0", borderRadius: 6, height: 6,
     overflow: "hidden", marginBottom: 16,
   },
-  progressFill: { height: "100%", borderRadius: 99, transition: "width .08s linear" },
+  progressFill: { height: "100%", borderRadius: 6, transition: "width .15s ease-out" },
   btn: {
-    width: "100%", padding: "13px 0", borderRadius: 11, border: "none",
-    background: `linear-gradient(135deg, ${T.accent}, #3451d1)`,
-    color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer",
-    fontFamily: "'Syne', sans-serif", letterSpacing: "-0.2px",
-    boxShadow: "0 4px 14px rgba(67,97,238,0.3)",
-    transition: "transform 0.2s, box-shadow 0.2s, opacity 0.2s",
+    width: "100%", padding: "12px 0", borderRadius: 8, border: "none",
+    background: T.accent,
+    color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer",
+    fontFamily: "'DM Sans', sans-serif", letterSpacing: "-0.2px",
+    boxShadow: "0 2px 8px rgba(37,99,235,0.2)",
+    transition: "all 0.2s",
   },
-  btnDisabled: { opacity: .4, cursor: "not-allowed" },
+  btnDisabled: { opacity: .55, cursor: "not-allowed" },
   ghostBtn: {
     background: "#fff",
-    border: `1px solid ${T.border}`,
-    color: T.muted,
-    boxShadow: "none",
+    border: `1.5px solid ${T.border}`,
+    color: T.text,
+    boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
   },
 };

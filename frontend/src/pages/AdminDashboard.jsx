@@ -1,80 +1,126 @@
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import StatCard from '../components/StatCard';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
+import ToastContainer from '../components/Toast';
+import { useApp } from '../context/AppContext';
 
-export default function AdminDashboard(){
+const chartData = [
+  { name: 'Jan', candidates: 45 },
+  { name: 'Feb', candidates: 78 },
+  { name: 'Mar', candidates: 62 },
+  { name: 'Apr', candidates: 110 },
+  { name: 'May', candidates: 95 },
+  { name: 'Jun', candidates: 130 },
+  { name: 'Jul', candidates: 88 },
+];
 
+function StatusBadge({ status }) {
+  const map = {
+    Active: 'badge badge-green',
+    Completed: 'badge badge-blue',
+    Draft: 'badge badge-gray',
+    Scheduled: 'badge badge-yellow',
+  };
+  return <span className={map[status] || 'badge badge-gray'}>{status}</span>;
+}
+
+export default function Dashboard() {
+  const { exams } = useApp();
   const navigate = useNavigate();
 
-  return(
+  const activeExams = exams.filter(e => e.status === 'Active').length;
+  const completedExams = exams.filter(e => e.status === 'Completed').length;
+  const totalCandidates = exams.reduce((a, e) => a + e.candidates, 0);
 
-    <div style={styles.container}>
+  return (
+    <div style={{ marginLeft: '230px', display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <Sidebar />
+      <Navbar />
+      <main style={{ flex: 1, overflow: 'auto', padding: '20px' }}>
+        <div>
+            <div className="page-header">
+              <div className="page-header-left">
+                <h1>Dashboard</h1>
+                <p>Overview of your assessment platform activity</p>
+              </div>
+              <button className="btn btn-primary" onClick={() => navigate('/create-exam')}>
+                + New Exam
+              </button>
+            </div>
 
-      <h1>Admin Dashboard</h1>
+            {/* Stat Cards */}
+            <div className="stat-cards-grid">
+              <StatCard label="Total Exams" value={exams.length} description="All time created" accent="blue" />
+              <StatCard label="Active Exams" value={activeExams} description="Currently running" accent="green" />
+              <StatCard label="Registered Candidates" value={totalCandidates} description="Across all exams" accent="blue" />
+              <StatCard label="Completed Exams" value={completedExams} description="Successfully finished" accent="green" />
+              <StatCard label="Proctoring Alerts" value="14" description="Last 24 hours" accent="red" />
+            </div>
 
-      <div style={styles.grid}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+              {/* Recent Exams Table */}
+              <div className="panel" style={{ gridColumn: '1 / -1' }}>
+                <div className="panel-header">
+                  <span className="panel-title">Recent Exams</span>
+                  <button className="btn btn-secondary btn-sm" onClick={() => navigate('/create-exam')}>
+                    + Create Exam
+                  </button>
+                </div>
+                <div className="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Exam Name</th>
+                        <th>Type</th>
+                        <th>Organization</th>
+                        <th>Candidates</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {exams.slice(0, 8).map(exam => (
+                        <tr key={exam.id}>
+                          <td style={{ fontWeight: 500, color: 'var(--color-text)' }}>{exam.name}</td>
+                          <td><span className="tag">{exam.type}</span></td>
+                          <td style={{ color: 'var(--color-text-muted)' }}>{exam.org}</td>
+                          <td style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>{exam.candidates}</td>
+                          <td><StatusBadge status={exam.status} /></td>
+                          <td style={{ color: 'var(--color-text-muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{exam.createdDate}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
-        <div style={styles.card}>
-          <h3>Manage Exams</h3>
-          <p>Create and monitor exams</p>
-        </div>
-
-        <div style={styles.card}>
-          <h3>Students</h3>
-          <p>View registered students</p>
-        </div>
-
-        <div style={styles.card}>
-          <h3>Proctoring Logs</h3>
-          <p>See cheating alerts</p>
-        </div>
-
-        <div style={styles.card}>
-          <h3>System Settings</h3>
-          <p>Control exam rules</p>
-        </div>
-
+              {/* Chart */}
+              <div className="panel" style={{ gridColumn: '1 / -1' }}>
+                <div className="panel-header">
+                  <span className="panel-title">Exam Participation — Monthly</span>
+                </div>
+                <div className="panel-body">
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={chartData} margin={{ top: 4, right: 16, left: 0, bottom: 4 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#888' }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 12, fill: '#888' }} axisLine={false} tickLine={false} />
+                      <Tooltip
+                        contentStyle={{ fontSize: 12, border: '1px solid #e5e5e5', borderRadius: 6, boxShadow: 'none' }}
+                        cursor={{ fill: '#f5f5f5' }}
+                      />
+                      <Bar dataKey="candidates" fill="#2563eb" radius={[3, 3, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <ToastContainer />
       </div>
-
-      <button style={styles.logout}
-        onClick={()=>navigate("/")}>
-        Logout
-      </button>
-
-    </div>
-
-  )
-
-}
-
-const styles = {
-
-container:{
-  minHeight:"100vh",
-  background:"#07090f",
-  color:"#fff",
-  padding:"40px"
-},
-
-grid:{
-  display:"grid",
-  gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
-  gap:"20px",
-  marginTop:"30px"
-},
-
-card:{
-  background:"rgba(255,255,255,0.05)",
-  padding:"20px",
-  borderRadius:"12px",
-  border:"1px solid rgba(255,255,255,0.08)"
-},
-
-logout:{
-  marginTop:"40px",
-  padding:"10px 18px",
-  border:"none",
-  borderRadius:"8px",
-  background:"#4f8bff",
-  color:"#fff"
-}
-
-}
+    );
+  }
