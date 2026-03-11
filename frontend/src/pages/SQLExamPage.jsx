@@ -27,10 +27,8 @@ const SQL_CSS = `
 }
 html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); }
 
-/* Layout */
 .sq-layout { display: grid; grid-template-rows: 60px 1fr; grid-template-columns: 1fr 288px; height: 100vh; }
 
-/* Topbar */
 .sq-topbar {
   grid-column: 1/-1; background: var(--surface); border-bottom: 1px solid var(--border);
   display: flex; align-items: center; padding: 0 24px; gap: 14px; z-index: 50;
@@ -40,7 +38,7 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
   width: 34px; height: 34px; border-radius: 9px;
   background: linear-gradient(135deg, #0284c7, #0369a1);
   display: flex; align-items: center; justify-content: center;
-  font-size: 16px; flex-shrink: 0; box-shadow: 0 2px 8px rgba(2,132,199,0.28);
+  flex-shrink: 0; box-shadow: 0 2px 8px rgba(2,132,199,0.28);
 }
 .sq-brand-name { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
 .sq-brand-sub  { font-size: 10px; color: var(--dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.6px; margin-top: 1px; }
@@ -50,6 +48,14 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-proctor-pill { display: flex; align-items: center; gap: 6px; background: var(--green-s); border: 1px solid rgba(22,163,74,0.18); border-radius: 100px; padding: 5px 12px; }
 .sq-proctor-dot  { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: sq-pulse 2s ease infinite; }
 .sq-proctor-label { font-size: 10px; font-weight: 700; color: var(--green); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.8px; }
+
+.sq-viol-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--amber-s); border: 1px solid rgba(217,119,6,0.2);
+  border-radius: 100px; padding: 5px 11px;
+}
+.sq-viol-label { font-size: 10px; font-weight: 700; color: var(--amber); font-family: 'JetBrains Mono', monospace; }
+
 .sq-timer { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: 100px; padding: 6px 16px; transition: all 0.4s; }
 .sq-timer.warning { background: var(--amber-s); border-color: rgba(217,119,6,0.3); }
 .sq-timer.danger  { background: var(--red-s);   border-color: rgba(220,38,38,0.3); animation: sq-timer-pulse 1s ease infinite; }
@@ -60,23 +66,19 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-timer.warning .sq-timer-val { color: var(--amber); }
 .sq-timer.danger  .sq-timer-val { color: var(--red); }
 
-/* Main */
-.sq-main { overflow-y: auto; padding: 32px 40px 110px; background: var(--bg); }
+.sq-main { overflow-y: auto; padding: 32px 40px 110px; background: var(--bg); position: relative; }
 
-/* Progress */
 .sq-exam-progress { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .sq-exam-progress-bar { flex: 1; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
 .sq-exam-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--accent), #0369a1); transition: width 0.5s cubic-bezier(.4,0,.2,1); }
 .sq-exam-progress-label { font-size: 11px; font-weight: 600; color: var(--muted); font-family: 'JetBrains Mono', monospace; white-space: nowrap; }
 
-/* Card */
 .sq-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); animation: sq-fadeUp 0.35s cubic-bezier(.22,1,.36,1); }
 .sq-qnum-row { padding: 20px 28px 0; display: flex; align-items: center; justify-content: space-between; }
 .sq-qnum-badge { background: var(--accent-s); border: 1px solid var(--accent-m); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; color: var(--accent); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; }
 .sq-qnum-of    { font-size: 11px; color: var(--dim); font-family: 'JetBrains Mono', monospace; font-weight: 500; }
 .sq-qtext      { padding: 16px 28px 14px; font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.55; letter-spacing: -0.2px; }
 
-/* Data table */
 .sq-table-wrap  { margin: 0 28px 16px; overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
 .sq-table       { width: 100%; border-collapse: collapse; font-size: 13px; }
 .sq-table thead tr { background: var(--accent-s); }
@@ -87,15 +89,10 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-table td.pk      { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--accent); }
 .sq-table td.missing { background: #fff7ed; color: var(--amber); font-weight: 700; font-family: 'JetBrains Mono', monospace; text-align: center; border: 2px dashed #fbbf24; border-radius: 4px; }
 
-/* SQL code block */
-.sq-code { margin: 0 28px 16px; background: #0f172a; border-radius: 10px; padding: 14px 18px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; color: #e2e8f0; overflow-x: auto; }
-
-/* Hint box */
 .sq-hint { margin: 0 28px 14px; background: #fefce8; border: 1px solid rgba(234,179,8,0.3); border-radius: 10px; padding: 10px 14px; }
 .sq-hint-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: #b45309; font-family: 'JetBrains Mono', monospace; margin-bottom: 5px; }
 .sq-hint-text  { font-size: 12px; color: #713f12; line-height: 1.6; }
 
-/* Options */
 .sq-options { padding: 0 24px 24px; display: flex; flex-direction: column; gap: 8px; }
 .sq-opt {
   display: flex; align-items: flex-start; gap: 12px; width: 100%; text-align: left;
@@ -112,17 +109,18 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-opt.selected .sq-opt-letter      { background: var(--accent); color: #fff; }
 .sq-opt.locked.selected .sq-opt-letter { background: var(--accent); color: #fff; }
 
-/* Option table (normalisation) */
 .sq-opt-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 5px; }
 .sq-opt-table th { background: #e0f2fe; padding: 5px 10px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #0284c7; letter-spacing: 1px; text-align: left; border-bottom: 1px solid #bae6fd; }
 .sq-opt-table td { padding: 5px 10px; color: var(--text2); border-bottom: 1px solid #f0f9ff; }
 .sq-opt-table tr:last-child td { border-bottom: none; }
 
-/* Answered notice */
 .sq-answered-notice { margin: 0 24px 20px; background: #f0f9ff; border: 1px solid rgba(2,132,199,0.15); border-radius: 10px; padding: 11px 14px; display: flex; align-items: center; gap: 9px; animation: sq-fadeUp 0.3s ease; }
 .sq-answered-notice-text { font-size: 12.5px; font-weight: 500; color: var(--accent); line-height: 1.5; }
 
-/* Action bar */
+/* ── Violation banner ── */
+.sq-viol-banner { display: none; margin-top: 14px; background: var(--amber-s); border: 1.5px solid rgba(217,119,6,0.25); border-radius: 10px; padding: 11px 16px; align-items: flex-start; gap: 9px; }
+.sq-viol-banner.show { display: flex; }
+
 .sq-action-bar {
   position: fixed; bottom: 0; left: 0; right: 289px;
   background: rgba(244,246,251,0.96); backdrop-filter: blur(14px);
@@ -136,7 +134,6 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-btn-next { flex: 1; padding: 12px; background: #0f172a; color: #fff; font-size: 14px; box-shadow: 0 2px 10px rgba(0,0,0,0.18); }
 .sq-btn-next:hover { background: #1e293b; }
 
-/* Sidebar */
 .sq-sidebar { background: var(--surface); border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
 .sq-webcam-section { padding: 16px 14px 14px; border-bottom: 1px solid var(--border); }
 .sq-section-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--dim); font-family: 'JetBrains Mono', monospace; margin-bottom: 10px; text-transform: uppercase; }
@@ -153,14 +150,13 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-webcam-active { font-size: 9px; color: var(--green); font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: 0.5px; }
 .sq-webcam-face { font-size: 9px; color: var(--dim); font-family: 'JetBrains Mono', monospace; }
 
-/* Stats */
 .sq-stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 14px; border-bottom: 1px solid var(--border); }
 .sq-stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 9px; padding: 10px 10px 8px; text-align: center; }
 .sq-stat-val { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; line-height: 1; }
 .sq-stat-lbl { font-size: 9px; color: var(--dim); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.5px; margin-top: 4px; }
 
-/* Nav */
 .sq-nav-section { padding: 14px; }
+.sq-nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
 .sq-nav-dot { aspect-ratio: 1; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace; border: 1.5px solid var(--border); background: var(--surface2); color: var(--dim); transition: all 0.12s; cursor: default; }
 .sq-nav-dot.current  { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 2px 8px rgba(2,132,199,0.3); }
 .sq-nav-dot.answered { background: #e8f5e9; border-color: rgba(22,163,74,0.3); color: var(--green); }
@@ -168,18 +164,13 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 .sq-legend-item { display: flex; align-items: center; gap: 5px; font-size: 9.5px; color: var(--dim); font-family: 'JetBrains Mono', monospace; }
 .sq-legend-dot { width: 8px; height: 8px; border-radius: 3px; flex-shrink: 0; }
 
-/* Watermark */
 .sq-watermark { position: fixed; top: 60px; left: 0; right: 288px; bottom: 0; pointer-events: none; z-index: 40; }
-
-/* Result overlay */
 .sq-result-overlay { display: none; position: fixed; inset: 0; background: rgba(244,246,251,0.97); backdrop-filter: blur(18px); z-index: 200; align-items: center; justify-content: center; padding: 24px; }
 .sq-result-overlay.show { display: flex; }
-
-/* Shake */
 .sq-shake { animation: sq-shake 0.4s ease !important; }
 
-/* Nav grid */
-.sq-nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.sq-redirect-bar { background: var(--border); border-radius: 99px; height: 5px; overflow: hidden; margin-top: 16px; }
+.sq-redirect-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--red), #f87171); transition: width 1s linear; }
 
 @keyframes sq-fadeUp  { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
 @keyframes sq-ping    { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(1.3); } }
@@ -188,7 +179,6 @@ html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--b
 @keyframes sq-timer-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(220,38,38,0.2); } 50% { box-shadow:0 0 0 6px rgba(220,38,38,0); } }
 `;
 
-/* ── Questions ── */
 const QUESTIONS = [
   {
     q: "Given the Employees table below, which query returns only employees in 'Engineering' with a salary above 70,000?",
@@ -200,53 +190,6 @@ const QUESTIONS = [
       { text: "SELECT * FROM Employees WHERE department = 'Engineering';" },
     ],
     ans: 0,
-    explanation: "AND requires both conditions simultaneously. OR would include non-Engineering rows with high salary.",
-  },
-  {
-    q: "Using the Customers and Orders tables, which query correctly lists each customer's name with their order total?",
-    tableDouble: {
-      tables: [
-        { label: "Customers", cols: ["cust_id","name","city"],       rows: [["C01","Alice","Chennai"],["C02","Bob","Mumbai"],["C03","Carol","Delhi"]] },
-        { label: "Orders",    cols: ["order_id","cust_id","total"],  rows: [["O01","C01","4500"],["O02","C02","2100"],["O03","C01","1800"]] },
-      ]
-    },
-    opts: [
-      { text: "SELECT c.name, o.total FROM Customers c INNER JOIN Orders o ON c.cust_id = o.cust_id;" },
-      { text: "SELECT c.name, o.total FROM Customers c, Orders o;" },
-      { text: "SELECT name, total FROM Customers WHERE cust_id IN (SELECT cust_id FROM Orders);" },
-      { text: "SELECT c.name, o.total FROM Customers c LEFT JOIN Orders o ON c.name = o.order_id;" },
-    ],
-    ans: 0,
-    explanation: "INNER JOIN on the shared key cust_id correctly links the two tables.",
-  },
-  {
-    q: "From the Sales table below, which query finds departments where the average salary exceeds 75,000?",
-    table: { headers: ["emp_id","name","dept","salary"], rows: [["1","Alice","Engineering","85000"],["2","Bob","Engineering","90000"],["3","Carol","HR","55000"],["4","Dave","Marketing","70000"],["5","Eve","Marketing","78000"]] },
-    opts: [
-      { text: "SELECT dept, AVG(salary) FROM Sales GROUP BY dept HAVING AVG(salary) > 75000;" },
-      { text: "SELECT dept, AVG(salary) FROM Sales WHERE AVG(salary) > 75000 GROUP BY dept;" },
-      { text: "SELECT dept FROM Sales GROUP BY dept WHERE salary > 75000;" },
-      { text: "SELECT dept, SUM(salary) FROM Sales GROUP BY dept HAVING SUM(salary) > 75000;" },
-    ],
-    ans: 0,
-    explanation: "HAVING filters aggregated groups. WHERE cannot be used with aggregate functions like AVG().",
-  },
-  {
-    q: "Given the Products and OrderItems tables, which query returns all products that have never been ordered?",
-    tableDouble: {
-      tables: [
-        { label: "Products",   cols: ["prod_id","name","price"],    rows: [["P01","Laptop","65000"],["P02","Mouse","850"],["P03","Keyboard","2200"],["P04","Monitor","22000"]] },
-        { label: "OrderItems", cols: ["item_id","prod_id","qty"],   rows: [["I01","P01","2"],["I02","P03","5"],["I03","P01","1"]] },
-      ]
-    },
-    opts: [
-      { text: "SELECT * FROM Products WHERE prod_id NOT IN (SELECT prod_id FROM OrderItems);" },
-      { text: "SELECT * FROM Products WHERE prod_id IN (SELECT prod_id FROM OrderItems);" },
-      { text: "SELECT * FROM Products p LEFT JOIN OrderItems o ON p.prod_id = o.prod_id WHERE o.qty > 0;" },
-      { text: "SELECT * FROM Products WHERE NOT EXISTS (SELECT * FROM OrderItems);" },
-    ],
-    ans: 0,
-    explanation: "NOT IN with a subquery returns rows whose key never appears in the related table.",
   },
   {
     q: "The table below violates 2NF due to a partial dependency. After correct decomposition, what value belongs in the highlighted cell (?) of the Products table?",
@@ -268,14 +211,52 @@ const QUESTIONS = [
       { label: "Laptop",   tableOpt: { headers: ["prod_id","prod_name","unit_price"], rows: [["P01","Laptop","65000"],["P02","Mouse","850"],["P03","Laptop","2200"]] } },
     ],
     ans: 0,
-    explanation: "P03 maps to 'Keyboard'. After 2NF decomposition, this moves to the Products dimension table.",
   },
 ];
 
-const LETTERS    = ["A","B","C","D"];
-const TOTAL_SECS = 15 * 60;
-const CUTOFF     = 60;
-const ROLL       = "240352";
+const LETTERS       = ["A","B","C","D"];
+const TOTAL_SECS    = 5 * 60;
+const CUTOFF        = 50;
+const ROLL          = "240352";
+const REDIRECT_SECS = 60;
+const MAX_VIOLATIONS = 3;
+
+/* ── SVG Icons ── */
+const IconDB = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+  </svg>
+);
+const IconTrophy = () => (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+  </svg>
+);
+const IconGrad = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+  </svg>
+);
+const IconPin = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22V12m0 0L6.5 6.5M12 12l5.5-5.5"/><circle cx="12" cy="5" r="3"/>
+  </svg>
+);
+const IconCheck = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+);
+const IconAlert = () => (
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+  </svg>
+);
+const IconWarn = () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+  </svg>
+);
 
 function buildWatermarkBg() {
   const W = 420, H = 240, c = document.createElement("canvas");
@@ -295,7 +276,6 @@ function buildWatermarkBg() {
   return `url(${c.toDataURL()})`;
 }
 
-/* ── Table renderer ── */
 function DataTable({ tableData, missingCell }) {
   if (!tableData) return null;
   return (
@@ -321,25 +301,6 @@ function DataTable({ tableData, missingCell }) {
   );
 }
 
-function DoubleTable({ data }) {
-  return (
-    <div style={{ margin: "0 28px 16px", display: "flex", gap: 0, border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
-      {data.tables.map((t, ti) => (
-        <div key={ti} style={{ flex: 1, borderRight: ti === 0 ? "1px solid var(--border)" : "none" }}>
-          <div style={{ padding: "6px 14px", background: "var(--accent-s)", fontFamily: "'JetBrains Mono',monospace", fontSize: 9, fontWeight: 700, color: "var(--accent)", letterSpacing: 1, borderBottom: "1px solid var(--border)", textTransform: "uppercase" }}>
-            {t.label}
-          </div>
-          <table className="sq-table">
-            <thead><tr>{t.cols.map(c => <th key={c}>{c}</th>)}</tr></thead>
-            <tbody>{t.rows.map((row, ri) => <tr key={ri}>{row.map((cell, ci) => <td key={ci} className={ci === 0 ? "pk" : ""}>{cell}</td>)}</tr>)}</tbody>
-          </table>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ── Component ── */
 export default function SQLExamPage({ onNavigate }) {
   useEffect(() => {
     if (document.getElementById("sq-styles")) return;
@@ -347,18 +308,29 @@ export default function SQLExamPage({ onNavigate }) {
     document.head.appendChild(s);
   }, []);
 
-  const [current,   setCurrent]   = useState(0);
-  const [answers,   setAnswers]   = useState(() => new Array(QUESTIONS.length).fill(null));
-  const [selected,  setSelected]  = useState(null);
-  const [confirmed, setConfirmed] = useState(false);
-  const [secsLeft,  setSecsLeft]  = useState(TOTAL_SECS);
-  const [examDone,  setExamDone]  = useState(false);
-  const [result,    setResult]    = useState(null);
-  const [shakeOpts, setShakeOpts] = useState(false);
-  const [wmBg,      setWmBg]      = useState("");
-  const [cardKey,   setCardKey]   = useState(0);
+  const [current,        setCurrent]        = useState(0);
+  const [answers,        setAnswers]        = useState(() => new Array(QUESTIONS.length).fill(null));
+  const [selected,       setSelected]       = useState(null);
+  const [confirmed,      setConfirmed]      = useState(false);
+  const [secsLeft,       setSecsLeft]       = useState(TOTAL_SECS);
+  // ── Restriction agent state ──
+  const [violations,     setViolations]     = useState(0);
+  const [violMsg,        setViolMsg]        = useState("");
+  const [showViolBanner, setShowViolBanner] = useState(false);
+  // ────────────────────────────
+  const [examDone,       setExamDone]       = useState(false);
+  const [result,         setResult]         = useState(null);
+  const [shakeOpts,      setShakeOpts]      = useState(false);
+  const [wmBg,           setWmBg]           = useState("");
+  const [cardKey,        setCardKey]        = useState(0);
+  const [redirectLeft,   setRedirectLeft]   = useState(REDIRECT_SECS);
 
-  const examDoneRef = useRef(false);
+  // ── Restriction agent refs ──
+  const violTimerRef   = useRef(null);
+  const listeningRef   = useRef(false);
+  const violationsRef  = useRef(0);
+  // ───────────────────────────
+  const examDoneRef    = useRef(false);
 
   useEffect(() => { setWmBg(buildWatermarkBg()); }, []);
 
@@ -367,6 +339,7 @@ export default function SQLExamPage({ onNavigate }) {
     setConfirmed(isC); setSelected(isC ? answers[current] : null); setCardKey(k => k + 1);
   }, [current]); // eslint-disable-line
 
+  // ── Countdown timer ──
   useEffect(() => {
     const id = setInterval(() => {
       setSecsLeft(s => { if (s <= 1) { clearInterval(id); doSubmit(); return 0; } return s - 1; });
@@ -374,9 +347,69 @@ export default function SQLExamPage({ onNavigate }) {
     return () => clearInterval(id);
   }, []); // eslint-disable-line
 
+  // ── Redirect countdown on fail ──
+  useEffect(() => {
+    if (!examDone || !result || result.passed) return;
+    const id = setInterval(() => {
+      setRedirectLeft(s => {
+        if (s <= 1) {
+          clearInterval(id);
+          if (onNavigate) onNavigate("lobby"); else window.location.assign("/");
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(id);
+  }, [examDone, result]); // eslint-disable-line
+
+  // ── Restriction agent: tab-switch & window-blur listeners ──
+  useEffect(() => {
+    // Give the page 2 s to settle before monitoring starts
+    const t = setTimeout(() => { listeningRef.current = true; }, 2000);
+
+    const onHide = () => {
+      if (listeningRef.current && document.hidden) triggerViolation("Tab switch detected");
+    };
+    const onBlur = () => {
+      if (listeningRef.current) triggerViolation("Window focus lost");
+    };
+
+    document.addEventListener("visibilitychange", onHide);
+    window.addEventListener("blur", onBlur);
+
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener("visibilitychange", onHide);
+      window.removeEventListener("blur", onBlur);
+    };
+  }, []); // eslint-disable-line
+
+  // ── Restriction agent: trigger a violation ──
+  const triggerViolation = useCallback((reason) => {
+    if (examDoneRef.current) return;
+
+    violationsRef.current += 1;
+    const v = violationsRef.current;
+    setViolations(v);
+
+    const msg = v < MAX_VIOLATIONS
+      ? `Security alert: ${reason} · ${v}/${MAX_VIOLATIONS} warnings`
+      : "Maximum violations reached. Exam is being submitted.";
+
+    setViolMsg(msg);
+    setShowViolBanner(true);
+
+    clearTimeout(violTimerRef.current);
+    violTimerRef.current = setTimeout(() => setShowViolBanner(false), 5000);
+
+    if (v >= MAX_VIOLATIONS) doSubmit();
+  }, []); // eslint-disable-line
+
   const doSubmit = useCallback(() => {
     if (examDoneRef.current) return;
-    examDoneRef.current = true; setExamDone(true);
+    examDoneRef.current = true;
+    setExamDone(true);
     setAnswers(prev => {
       let correct = 0;
       QUESTIONS.forEach((q, i) => { if (prev[i] === q.ans) correct++; });
@@ -402,16 +435,17 @@ export default function SQLExamPage({ onNavigate }) {
   const answered     = answers.filter(a => a !== null).length;
   const remaining    = QUESTIONS.length - answered;
   const progressPct  = Math.round(((current + 1) / QUESTIONS.length) * 100);
+  const redirectPct  = (redirectLeft / REDIRECT_SECS) * 100;
 
   return (
     <>
       <div className="sq-watermark" style={{ backgroundImage: wmBg, backgroundRepeat: "repeat", backgroundSize: "420px 240px" }} />
 
       <div className="sq-layout">
-        {/* TOPBAR */}
+        {/* ── Top bar ── */}
         <header className="sq-topbar">
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div className="sq-brand-icon">🗄️</div>
+            <div className="sq-brand-icon"><IconDB /></div>
             <div>
               <div className="sq-brand-name">NeuroAssess</div>
               <div className="sq-brand-sub">ASSESSMENT PLATFORM</div>
@@ -420,14 +454,29 @@ export default function SQLExamPage({ onNavigate }) {
           <div style={{ width: 1, height: 26, background: "var(--border)", flexShrink: 0 }} />
           <div>
             <div className="sq-exam-title">Database &amp; SQL · Round 2</div>
-            <div className="sq-exam-meta">MCQ · {QUESTIONS.length} Questions · 15 min</div>
+            <div className="sq-exam-meta">MCQ · {QUESTIONS.length} Questions · 5 min</div>
           </div>
+
+          {/* ── Violation badge (shown when violations > 0) ── */}
+          {violations > 0 && (
+            <div className="sq-viol-badge">
+              <IconWarn />
+              <span className="sq-viol-label">{violations} Warning{violations > 1 ? "s" : ""}</span>
+            </div>
+          )}
+
           <div className="sq-spacer" />
-          <div className="sq-proctor-pill"><div className="sq-proctor-dot" /><span className="sq-proctor-label">PROCTORED</span></div>
-          <div className={timerCls}><div className="sq-timer-dot" /><span className="sq-timer-val">{mm}:{ss}</span></div>
+          <div className="sq-proctor-pill">
+            <div className="sq-proctor-dot" />
+            <span className="sq-proctor-label">PROCTORED</span>
+          </div>
+          <div className={timerCls}>
+            <div className="sq-timer-dot" />
+            <span className="sq-timer-val">{mm}:{ss}</span>
+          </div>
         </header>
 
-        {/* MAIN */}
+        {/* ── Main content ── */}
         <main className="sq-main">
           <div className="sq-exam-progress">
             <div className="sq-exam-progress-bar">
@@ -443,21 +492,17 @@ export default function SQLExamPage({ onNavigate }) {
             </div>
             <div className="sq-qtext">{q.q}</div>
 
-            {/* Single table */}
             {q.table && <DataTable tableData={q.table} missingCell={q.table?.missingCell} />}
 
-            {/* Double table */}
-            {q.tableDouble && <DoubleTable data={q.tableDouble} />}
-
-            {/* Hint */}
             {q.hint && (
               <div className="sq-hint">
-                <div className="sq-hint-label">📌 Context</div>
+                <div className="sq-hint-label" style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                  <IconPin /> CONTEXT
+                </div>
                 <div className="sq-hint-text">{q.hint}</div>
               </div>
             )}
 
-            {/* Options */}
             <div className={`sq-options${shakeOpts ? " sq-shake" : ""}`}>
               {q.opts.map((opt, i) => {
                 let cls = "sq-opt";
@@ -488,20 +533,34 @@ export default function SQLExamPage({ onNavigate }) {
               })}
             </div>
 
-            {/* Answered notice */}
             {confirmed && (
               <div className="sq-answered-notice">
+                <IconCheck />
                 <span className="sq-answered-notice-text">Response recorded. You can proceed to the next question.</span>
               </div>
             )}
           </div>
+
+          {/* ── Violation banner (mirrors ExamPage) ── */}
+          {showViolBanner && (
+            <div className="sq-viol-banner show">
+              <IconWarn />
+              <p style={{ fontSize: 12, color: "var(--amber)", lineHeight: 1.6, fontWeight: 600, margin: 0 }}>
+                {violMsg}
+              </p>
+            </div>
+          )}
         </main>
 
-        {/* ACTION BAR */}
+        {/* ── Action bar ── */}
         <div className="sq-action-bar">
           {!confirmed && (
-            <button className="sq-btn sq-btn-primary" onClick={confirmAnswer} disabled={selected === null}
-              style={{ opacity: selected === null ? 0.5 : 1 }}>
+            <button
+              className="sq-btn sq-btn-primary"
+              onClick={confirmAnswer}
+              disabled={selected === null}
+              style={{ opacity: selected === null ? 0.5 : 1 }}
+            >
               Save &amp; Continue
             </button>
           )}
@@ -512,23 +571,31 @@ export default function SQLExamPage({ onNavigate }) {
           )}
         </div>
 
-        {/* SIDEBAR */}
+        {/* ── Sidebar ── */}
         <aside className="sq-sidebar">
           <div className="sq-webcam-section">
             <div className="sq-section-label">Live Monitoring</div>
             <div className="sq-webcam-box">
               <div className="sq-webcam-inner">
-                <div className="sq-sil"><div className="sq-sil-head" /><div className="sq-sil-body" /></div>
-                <div className="sq-webcam-overlay"><div className="sq-webcam-rec" /><span className="sq-webcam-rec-label">LIVE</span></div>
+                <div className="sq-sil">
+                  <div className="sq-sil-head" />
+                  <div className="sq-sil-body" />
+                </div>
+                <div className="sq-webcam-overlay">
+                  <div className="sq-webcam-rec" />
+                  <span className="sq-webcam-rec-label">LIVE</span>
+                </div>
               </div>
             </div>
             <div className="sq-webcam-status">
-              <div style={{ display: "flex", alignItems: "center", gap: 5 }}><div className="sq-webcam-dot" /><span className="sq-webcam-active">ACTIVE</span></div>
-              <span className="sq-webcam-face">Face detected ✓</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                <div className="sq-webcam-dot" />
+                <span className="sq-webcam-active">ACTIVE</span>
+              </div>
+              <span className="sq-webcam-face">Face detected</span>
             </div>
           </div>
 
-          {/* Stats — no cutoff */}
           <div className="sq-stats-row">
             {[
               { val: answered,  lbl: "ANSWERED",  color: "var(--green)"  },
@@ -541,7 +608,6 @@ export default function SQLExamPage({ onNavigate }) {
             ))}
           </div>
 
-          {/* Navigator — display only, no click */}
           <div className="sq-nav-section">
             <div className="sq-section-label">Questions</div>
             <div className="sq-nav-grid">
@@ -554,9 +620,9 @@ export default function SQLExamPage({ onNavigate }) {
             </div>
             <div className="sq-legend">
               {[
-                { color: "var(--accent)", border: "none",                          label: "Active"  },
-                { color: "#e8f5e9",       border: "1px solid rgba(22,163,74,0.3)", label: "Done"    },
-                { color: "var(--surface2)", border: "1px solid var(--border)",     label: "Pending" },
+                { color: "var(--accent)",   border: "none",                          label: "Active"  },
+                { color: "#e8f5e9",         border: "1px solid rgba(22,163,74,0.3)", label: "Done"    },
+                { color: "var(--surface2)", border: "1px solid var(--border)",       label: "Pending" },
               ].map(({ color, border, label }) => (
                 <div className="sq-legend-item" key={label}>
                   <div className="sq-legend-dot" style={{ background: color, border }} />{label}
@@ -564,11 +630,10 @@ export default function SQLExamPage({ onNavigate }) {
               ))}
             </div>
           </div>
-
         </aside>
       </div>
 
-      {/* RESULT OVERLAY */}
+      {/* ── Result overlay ── */}
       {examDone && result && (
         <div className="sq-result-overlay show">
           <div style={{
@@ -583,18 +648,20 @@ export default function SQLExamPage({ onNavigate }) {
                 width: 72, height: 72, borderRadius: "50%", marginBottom: 20,
                 background: result.passed ? "#f0fdf4" : "#fef2f2",
                 border: `2px solid ${result.passed ? "rgba(22,163,74,0.2)" : "rgba(220,38,38,0.2)"}`,
-                fontSize: 34
+                color: result.passed ? "var(--green)" : "var(--red)"
               }}>
-                {result.passed ? "🏆" : "📋"}
+                {result.passed ? <IconTrophy /> : <IconAlert />}
               </div>
               <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 1.5, color: result.passed ? "var(--green)" : "var(--red)", fontFamily: "'JetBrains Mono',monospace", marginBottom: 10 }}>
                 {result.passed ? "ASSESSMENT COMPLETE" : "ASSESSMENT ENDED"}
               </div>
-              <h2 style={{ fontSize: 22, fontWeight: 700, color: "var(--text)", letterSpacing: -0.4, marginBottom: 10 }}>Round 2 Submitted</h2>
+              <h2 style={{ fontSize: 22, fontWeight: 700, color: "var(--text)", letterSpacing: -0.4, marginBottom: 10 }}>
+                {result.passed ? "Round 2 Submitted" : "Sorry, Better Luck Next Time"}
+              </h2>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.7, marginBottom: 28 }}>
                 {result.passed
                   ? "You have successfully completed both rounds of the NeuroAssess evaluation."
-                  : "Your Round 2 assessment has been submitted. Review SQL concepts and retry when ready."}
+                  : "You did not meet the passing threshold for Round 2. Keep practising your SQL skills and try again when you're ready."}
               </p>
 
               <div style={{ background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: 12, padding: "20px 24px", marginBottom: 24, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20 }}>
@@ -613,8 +680,8 @@ export default function SQLExamPage({ onNavigate }) {
               </div>
 
               {result.passed && (
-                <div style={{ background: "linear-gradient(135deg,#f0fdf4,#dcfce7)", border: "1.5px solid rgba(22,163,74,0.25)", borderRadius: 14, padding: 18, marginBottom: 16, textAlign: "left", display: "flex", gap: 14 }}>
-                  <div style={{ fontSize: 32, flexShrink: 0 }}>🎓</div>
+                <div style={{ background: "linear-gradient(135deg,#f0fdf4,#dcfce7)", border: "1.5px solid rgba(22,163,74,0.25)", borderRadius: 14, padding: 18, marginBottom: 16, textAlign: "left", display: "flex", gap: 14, alignItems: "flex-start" }}>
+                  <div style={{ color: "var(--green)", flexShrink: 0, marginTop: 2 }}><IconGrad /></div>
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 700, color: "var(--green)", marginBottom: 4 }}>All Rounds Cleared</div>
                     <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6 }}>Both MCQ and SQL rounds complete. Your results have been recorded.</div>
@@ -622,21 +689,28 @@ export default function SQLExamPage({ onNavigate }) {
                 </div>
               )}
 
+              {!result.passed && (
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 11, color: "var(--dim)", fontFamily: "'JetBrains Mono',monospace", marginBottom: 8, textAlign: "left" }}>
+                    REDIRECTING TO DASHBOARD IN {redirectLeft}s
+                  </div>
+                  <div className="sq-redirect-bar">
+                    <div className="sq-redirect-fill" style={{ width: `${redirectPct}%` }} />
+                  </div>
+                </div>
+              )}
+
               <div style={{ display: "flex", gap: 10 }}>
-                {!result.passed && (
-                  <button
-                    onClick={() => window.location.reload()}
-                    style={{ flex: 1, padding: 13, borderRadius: 9, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, fontFamily: "'Inter',sans-serif", cursor: "pointer" }}
-                  >
-                    Retry Round 2
-                  </button>
-                )}
+                {!result.passed && 
+            
+             
                 <button
                   onClick={() => onNavigate ? onNavigate("lobby") : window.location.assign("/")}
                   style={{ flex: 1, padding: 13, borderRadius: 9, border: "1.5px solid var(--border)", background: "var(--surface2)", color: "var(--text)", fontSize: 14, fontWeight: 600, fontFamily: "'Inter',sans-serif", cursor: "pointer" }}
                 >
-                  Return to Lobby
+                  Return to Dashboard
                 </button>
+                   }
               </div>
             </div>
           </div>
